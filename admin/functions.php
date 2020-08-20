@@ -1,5 +1,5 @@
 <?php
-include_once ('connect.php');
+include_once('connect.php');
 
 function pars($var, $die = true)
 {
@@ -13,13 +13,13 @@ function pars($var, $die = true)
     }
 }
 
-function get_folder_path ($filename, $folder)
+function get_folder_path($filename, $folder)
 {
     $avatarFolder = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR;
     return $avatarFolder . $filename;
 }
 
-function get_image_path ($filename, $folder)
+function get_image_path($filename, $folder)
 {
     $avatarFolder = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR;
     $avatarFile = $avatarFolder . $filename;
@@ -28,13 +28,12 @@ function get_image_path ($filename, $folder)
     return mb_substr($avatarWebPath, 13);
 }
 
-function check_replace ($string)
+function check_replace($string)
 {
     if ($string == 1) {
         $checked = '&check;';
         return str_replace(1, $string, $checked);
-    }
-    else {
+    } else {
         $unchecked = '&#10007;';
         return str_replace(0, $string, $unchecked);
     }
@@ -137,56 +136,4 @@ function get_nav_list_res()
     $count_item = $result["COUNT(*)"];
     list($path, $queryString) = explode('?', $_SERVER['REQUEST_URI']);
     return get_nav_list($count_item, $curPage, 2, $queryString, $path);
-}
-
-function showServiceTypeFilterIndex($allTitle = "Все навыки")
-{
-    $so = [
-        ['name' => 'Усидчивость', 'id' => '1'],
-        ['name' => 'Опрятность', 'id' => '2'],
-        ['name' => 'Самообучаемость', 'id' => '3'],
-        ['name' => 'Трудолюбие', 'id' => '4']
-    ];
-    array_unshift($so, ['name' => $allTitle, 'id' => '']);
-    return getList($so, "service-type-filter");
-}
-
-function getList($elements, $name, $currentVal = -1)
-{
-    $html = "<select data-smart-positioning='false' name='$name' data-search='false' class='$name nostylelist'>";
-    foreach ($elements as $item) {
-        $selected = ($item['id'] == $currentVal) ? "selected" : "";
-        $html .= "<option {$selected} value='{$item['id']}' title='{$item['name']}'>{$item['name']}</option>";
-    }
-    $html .= "</select>";
-    return $html;
-}
-
-function filter($elements)
-{
-    $conn = new mysqli('127.0.0.1', 'root', '', 'anceta');
-    $query = $conn->query("SELECT * FROM allresult WHERE selflearning!='0'");
-
-    return;
-}
-
-function test ()
-{
-    $conn = new mysqli('127.0.0.1', 'root', '', 'anceta');
-
-    $sql = "SELECT * FROM allresult WHERE selflearning!='0'";
-    $result = $conn->query($sql);
-
-    if ($result > 0) {
-        echo "<table><tr><th>ID</th></tr>";
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr><td>" . $row["id"] . "</td></tr>";
-        }
-        echo "</table>";
-    } else {
-        echo "Нет совпадений";
-    }
-    $conn->close();
-
-    return;
 }
