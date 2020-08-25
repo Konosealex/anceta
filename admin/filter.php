@@ -70,7 +70,7 @@ include('functions.php');
             </div>
         </form>
 
-        <table class="separate">
+        <table class="separate hide">
             <thead>
             <tr>
                 <th>Пол</th>

@@ -19,3 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.separate thead .sorting').forEach(tableTH => tableTH.addEventListener('click', () => getSort(event)));
 
 });
+
+var elems;
+elems = document.getElementsByClassName("error");
+tableHide(tableHide);
+
+function tableHide() {
+    var elemsHide;
+    elemsHide = document.getElementsByClassName("separate hide");
+    for(var i=0; i<elems.length; i++)elemsHide[i].style.display='none';
+}
