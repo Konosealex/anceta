@@ -38,7 +38,7 @@
             <div class="tab">
                 <h2>Шаг 2</h2>
                 <div class="form-inner">
-                    <label for="avatar">Ваш аватар</label>
+                    <label for="avatar">Ваш аватар <sup>* не более 100кб</sup></label>
                     <input type="file" size="100000" accept=".jpg, .jpeg, .png" id="avatar" name="avatar" oninput="this.className = ''">
 
                     <label for="color">Любимый цвет</label>
