@@ -10,8 +10,13 @@
         <div class="form-right-decoration"></div>
         <div class="circle"></div>
         <div class="form-inner">
+            <?if ((($_POST['sex']) == "") || (($_POST['lastName']) == "") || (($_POST['birthDate']) == "")): ?>
             <h1>Не все данные введены.<br>
                 Пожалуйста, вернитесь назад и закончите ввод</h1>
+            <?endif;?>
+            <?if (($_FILES['avatar']['size']) > 100000):?>
+                <h1>Размер файла превышает 100 кб!</h1>
+            <?endif;?>
             <div class="buttons">
                 <div>
                     <button class="button__wrap-prev" type="button" id="prevBtn" onclick="history.back()">Назад</button>
