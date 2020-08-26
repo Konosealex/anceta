@@ -22,6 +22,10 @@ h1, h2 {
     max-width: 90%;
 }
 
+.decor.admin .form-inner p {
+    text-align: center;
+}
+
 .form-left-decoration,
 .form-right-decoration {
     content: "";

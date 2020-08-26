@@ -15,7 +15,22 @@ include('functions.php');
     <div class="form-right-decoration"></div>
     <div class="circle"></div>
     <div class="form-inner">
+        <?
+        if (isset($_COOKIE['id']) and isset($_COOKIE['hash'])) {
+            $query = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '" . intval($_COOKIE['id']) . "' LIMIT 1");
+            $userdata = mysqli_fetch_assoc($query);
+
+            if (($userdata['user_hash'] !== $_COOKIE['hash']) or ($userdata['user_id'] !== $_COOKIE['id'])) {
+                setcookie("id", "", time() - 3600 * 24 * 30 * 12, "/");
+                setcookie("hash", "", time() - 3600 * 24 * 30 * 12, "/", null, null, true); // httponly !!!
+                $err = '<p>Хм, что-то не получилось</p>';
+            } else {
+                $ok = "<p>Привет, " . $userdata['user_login'] . ".</p>";
+            }
+        } ?>
         <h1>Список анкет</h1>
+        <?= $ok ?>
+        <?= $err ?>
         <table class="separate">
             <thead>
             <tr>
@@ -77,7 +92,8 @@ include('functions.php');
                 <button class="button__wrap-prev" type="button" id="prevBtn"><a href="/">Выход</a></button>
             </div>
             <div>
-                <button class="button__wrap-next" type="button" id="nextBtn"><a href="filter.php">Фильтр анкет</a></button>
+                <button class="button__wrap-next" type="button" id="nextBtn"><a href="filter.php">Фильтр анкет</a>
+                </button>
             </div>
         </div>
     </div>
