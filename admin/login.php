@@ -1,6 +1,7 @@
 <?php
 require_once('connect.php');
 include('functions.php');
+session_start();
 ?>
 <html lang="ru">
 <head>
@@ -10,7 +11,9 @@ include('functions.php');
 <body>
 <?
 $link = $conn;
-
+if (!empty($_SESSION['auth'])) {
+    header("Location: ../admin/index.php");
+}
 if (isset($_POST['submit'])) {
     // Вытаскиваем из БД запись, у которой логин равняеться введенному
     $query = mysqli_query($link, "SELECT user_id, user_password FROM users WHERE user_login='" . mysqli_real_escape_string($link, $_POST['login']) . "' LIMIT 1");

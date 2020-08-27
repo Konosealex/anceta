@@ -1,6 +1,7 @@
 <?php
 require_once('connect.php');
 include('functions.php');
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -25,6 +26,7 @@ include('functions.php');
                 setcookie("hash", "", time() - 3600 * 24 * 30 * 12, "/", null, null, true); // httponly !!!
                 $err = '<p>Хм, что-то не получилось</p>';
             } else {
+                $_SESSION['auth'] = true;
                 $ok = "<p>Привет, " . $userdata['user_login'] . ".</p>";
             }
         } ?>
@@ -89,7 +91,7 @@ include('functions.php');
         </div>
         <div class="buttons">
             <div>
-                <button class="button__wrap-prev" type="button" id="prevBtn"><a href="/">Выход</a></button>
+                <button class="button__wrap-prev" type="button" id="prevBtn"><a href="logout.php">Выход</a></button>
             </div>
             <div>
                 <button class="button__wrap-next" type="button" id="nextBtn"><a href="filter.php">Фильтр анкет</a>

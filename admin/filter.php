@@ -1,6 +1,10 @@
 <?php
 require_once('connect.php');
 include('functions.php');
+session_start();
+if (empty($_SESSION['auth'])) {
+    header("Location: ../admin/login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -123,7 +127,7 @@ include('functions.php');
                 <button class="button__wrap-prev" type="button" id="prevBtn"><a href="index.php">К списку анкет</a></button>
             </div>
             <div>
-                <button class="button__wrap-next" type="button" id="nextBtn"><a href="/">Выход</a></button>
+                <button class="button__wrap-next" type="button" id="nextBtn"><a href="logout.php">Выход</a></button>
             </div>
         </div>
     </div>
