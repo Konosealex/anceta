@@ -1,10 +1,12 @@
 <?php
-
 require_once('connect.php');
 include('functions.php');
 
 if ((($_POST['sex']) == "") || (($_POST['lastName']) == "") || (($_POST['birthDate']) == "")) {
     die (require 'error.php');
+}
+if (($_FILES['avatar']['size']) > 100000) {
+    die(require 'error.php');
 }
 //строки
 $sexFilter = htmlspecialchars($_POST['sex'], ENT_QUOTES, 'UTF-8');
@@ -13,9 +15,6 @@ $nameFilter = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
 $thirdNameFilter = htmlspecialchars($_POST['thirdName'], ENT_QUOTES, 'UTF-8');
 $birthDateFilter = htmlspecialchars($_POST['birthDate'], ENT_QUOTES, 'UTF-8');
 //изображение
-if (($_FILES['avatar']['size']) > 100000) {
-   die(require 'error.php');
-}
 $avatarUploadFolder = 'uploads\users\avatar';
 $avatarName = $_FILES['avatar']['name'];
 $avatarTmp = $_FILES['avatar']['tmp_name'];
@@ -28,7 +27,9 @@ $perseverance = (isset($_POST['perseverance'])) ? 1 : 0;
 $neatness = (isset($_POST['neatness'])) ? 1 : 0;
 $selfLearning = (isset($_POST['self-learning'])) ? 1 : 0;
 $hardWork = (isset($_POST['hard-work'])) ? 1 : 0;
-$photosFilter = htmlspecialchars($_POST ['photos'], ENT_QUOTES, 'UTF-8');
+$photosFilter = $_FILES['photos'];
+photos_check($photosFilter);
+
 //итог
 $sex = $sexFilter;
 $lastName = $lastNameFilter;

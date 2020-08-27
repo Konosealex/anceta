@@ -148,3 +148,22 @@ function generateCode($length = 6)
     }
     return $code;
 }
+
+function photos_check($arr)
+{
+    foreach ($arr['name'] as $photosCount) {
+        $photosCount = count($arr['name']);
+        $arRes['count'] = $photosCount;
+    }
+    foreach ($arr['size'] as $size) {
+        $size = $arr['size'];
+        $arRes['sizes'] = $size;
+        if(($arRes['sizes']) > 1000000) {
+            die(require 'error.php');
+        }
+    }
+    if ($arRes['count'] > 5) {
+        die(require 'error.php');
+    }
+    return $arRes;
+}

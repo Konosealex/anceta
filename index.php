@@ -79,7 +79,7 @@
                 <div class="form-inner">
                     <h2>Шаг 4</h2>
                     <label for="photos">Загрузка фотографий </label>
-                    <input type="file" size="100000" accept=".jpg, .jpeg, .png" id="photos" name="photos" oninput="this.className = ''">
+                    <input type="file" size="100000" accept=".jpg, .jpeg, .png" id="photos" multiple="multiple" name="photos[]" oninput="this.className = ''">
                 </div>
             </div>
 
