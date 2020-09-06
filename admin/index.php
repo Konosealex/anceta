@@ -1,7 +1,10 @@
 <?php
 require_once('connect.php');
-include('functions.php');
+include_once('functions.php');
 session_start();
+if (empty(htmlspecialchars($_COOKIE["auth"]))) {
+    header("Location: ../admin/login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +26,8 @@ session_start();
 
             if (($userdata['user_hash'] !== $_COOKIE['hash']) or ($userdata['user_id'] !== $_COOKIE['id'])) {
                 setcookie("id", "", time() - 3600 * 24 * 30 * 12, "/");
-                setcookie("hash", "", time() - 3600 * 24 * 30 * 12, "/", null, null, true); // httponly !!!
+                setcookie("hash", "", time() - 3600 * 24 * 30 * 12, "/", null, null, true);
+                setcookie("auth", "", time() - 3600 * 24 * 30 * 12, "/", null, null, true);
                 $err = '<p>Хм, что-то не получилось</p>';
             } else {
                 $_SESSION['auth'] = true;
@@ -64,7 +68,7 @@ session_start();
             <? if ($query): ?>
                 <? while ($row = mysqli_fetch_assoc($query)): ?>
                     <tr>
-                        <td><?= $row['sex']; ?></td>
+                        <td><?= sex_replace($row['sex']); ?></td>
                         <td class="link"><a href="detail.php?id=<?= $row['id'] ?>"
                                             title="Переход на детальную страницу"><?= $row['lastName']; ?></a></td>
                         <td><?= $row['username']; ?></td>
@@ -80,7 +84,24 @@ session_start();
                             class="selflearning"><?= check_replace($row['selflearning']); ?></td>
                         <td style="text-align: center"
                             class="hardworking"><?= check_replace($row['hardworking']); ?></td>
-                        <td><?= $row['photos']; ?></td>
+                        <td>
+                            <!--страшный блочек выводящий в 1 ячейку таблицы все фотки-->
+                            <?if($row['photos1']):?>
+                                <a href="<?= $row['photos1']; ?>"><?= $row['photos1']; ?></a>
+                            <?endif;?>
+                            <?if($row['photos2']):?>
+                                <a href="<?= $row['photos2']; ?>"><?= $row['photos2']; ?></a>
+                            <?endif;?>
+                            <?if($row['photos3']):?>
+                                <a href="<?= $row['photos3']; ?>"><?= $row['photos3']; ?></a>
+                            <?endif;?>
+                            <?if($row['photos4']):?>
+                                <a href="<?= $row['photos4']; ?>"><?= $row['photos4']; ?></a>
+                            <?endif;?>
+                            <?if($row['photos5']):?>
+                                <a href="<?= $row['photos5']; ?>"><?= $row['photos5']; ?></a>
+                            <?endif;?>
+                        </td>
                     </tr>
                 <? endwhile; ?>
             <? endif; ?>

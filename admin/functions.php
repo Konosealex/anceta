@@ -13,16 +13,10 @@ function pars($var, $die = true)
     }
 }
 
-function get_folder_path($filename, $folder)
-{
-    $avatarFolder = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR;
-    return $avatarFolder . $filename;
-}
-
 function get_image_path($filename, $folder)
 {
     $avatarFolder = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR;
-    $avatarFile = $avatarFolder . $filename;
+    $avatarFile = $avatarFolder . $filename . " ";
     $avatarSlashLol = '/';
     $avatarWebPath = str_replace(DIRECTORY_SEPARATOR, $avatarSlashLol, $avatarFile);
     return mb_substr($avatarWebPath, 13);
@@ -36,6 +30,17 @@ function check_replace($string)
     } else {
         $unchecked = '&#10007;';
         return str_replace(0, $string, $unchecked);
+    }
+}
+
+function sex_replace($string)
+{
+    if ($string == 'male') {
+        $sex = 'Мужчина';
+        return str_replace('male', $string, $sex);
+    } else {
+        $sex = 'Женщина';
+        return str_replace('female', $string, $sex);
     }
 }
 
@@ -149,21 +154,79 @@ function generateCode($length = 6)
     return $code;
 }
 
-function photos_check($arr)
+function massPhotoLoader ($input_name, $path, $photosUploadFolder)
 {
-    foreach ($arr['name'] as $photosCount) {
-        $photosCount = count($arr['name']);
-        $arRes['count'] = $photosCount;
-    }
-    foreach ($arr['size'] as $size) {
-        $size = $arr['size'];
-        $arRes['sizes'] = $size;
-        if(($arRes['sizes']) > 1000000) {
-            die(require 'error.php');
+// Разрешенные расширения файлов.
+    $allow = array('jpg', 'jpeg', 'png');
+
+    if (isset($_FILES[$input_name])) {
+        // Преобразуем массив $_FILES в удобный вид для перебора в foreach.
+        $files = array();
+        $diff = count($_FILES[$input_name]) - count($_FILES[$input_name], COUNT_RECURSIVE);
+        if ($diff == 0) {
+            $files = array($_FILES[$input_name]);
+        } else {
+            foreach ($_FILES[$input_name] as $k => $l) {
+                foreach ($l as $i => $v) {
+                    $files[$i][$k] = $v;
+                }
+            }
+        }
+
+        foreach ($files as $file) {
+
+            $photosCount = count($files);
+            $arRes['count'] = $photosCount;
+            if(($arRes['count']) > 5) {
+                die(require 'error.php');
+            }
+            $arRes['size'] = filesize($file["tmp_name"]);
+            if(($arRes['size']) > 1000000) {
+                die(require 'error.php');
+            }
+
+            // Оставляем в имени файла только буквы, цифры и некоторые символы.
+            $pattern = "[^a-zа-яё0-9,~!@#%^-_\$\?\(\)\{\}\[\]\.]";
+            $name = mb_eregi_replace($pattern, '-', $file['name']);
+            $name = mb_ereg_replace('[-]+', '-', $name);
+            // Т.к. есть проблема с кириллицей в названиях файлов (файлы становятся недоступны).
+            // Сделаем их транслит:
+            $converter = array(
+                'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e',
+                'ё' => 'e', 'ж' => 'zh', 'з' => 'z', 'и' => 'i', 'й' => 'y', 'к' => 'k',
+                'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r',
+                'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c',
+                'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch', 'ь' => '', 'ы' => 'y', 'ъ' => '',
+                'э' => 'e', 'ю' => 'yu', 'я' => 'ya',
+
+                'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E',
+                'Ё' => 'E', 'Ж' => 'Zh', 'З' => 'Z', 'И' => 'I', 'Й' => 'Y', 'К' => 'K',
+                'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O', 'П' => 'P', 'Р' => 'R',
+                'С' => 'S', 'Т' => 'T', 'У' => 'U', 'Ф' => 'F', 'Х' => 'H', 'Ц' => 'C',
+                'Ч' => 'Ch', 'Ш' => 'Sh', 'Щ' => 'Sch', 'Ь' => '', 'Ы' => 'Y', 'Ъ' => '',
+                'Э' => 'E', 'Ю' => 'Yu', 'Я' => 'Ya',
+            );
+
+            $name = strtr($name, $converter);
+            $parts = pathinfo($name);
+
+            if (!empty($allow) && !in_array(strtolower($parts['extension']), $allow)) {
+                die(require 'error.php');
+            } else {
+                // Чтобы не затереть файл с таким же названием, добавим префикс.
+                $i = 0;
+                $prefix = '';
+                while (is_file($path . $parts['filename'] . $prefix . '.' . $parts['extension'])) {
+                    $prefix = '(' . ++$i . ')';
+                }
+                $name = $parts['filename'] . $prefix . '.' . $parts['extension'];
+                // Перемещаем файл в директорию.
+                move_uploaded_file($file['tmp_name'], $path . $name);
+                $total .= get_image_path($name, $photosUploadFolder);
+            }
         }
     }
-    if ($arRes['count'] > 5) {
-        die(require 'error.php');
-    }
-    return $arRes;
+    $arPhotos = explode(" ", $total);
+    $test1 = array_pop($arPhotos);
+    return $arPhotos;
 }

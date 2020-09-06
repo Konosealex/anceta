@@ -1,6 +1,10 @@
 <?php
 require_once('connect.php');
 include('functions.php');
+session_start();
+if (empty(htmlspecialchars($_COOKIE["auth"]))) {
+    header("Location: ../admin/login.php");
+}
 $id = htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8');
 ?>
 

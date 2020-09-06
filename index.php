@@ -22,13 +22,13 @@
                     </select>
 
                     <label for="lastName">Фамилия</label>
-                    <input class="required" type="text" id="lastName" placeholder="Введите фамилию" name="lastName" oninput="this.className = ''">
+                    <input class="required" type="text" id="lastName" placeholder="Введите фамилию" name="lastName" maxlength="30" oninput="this.className = ''">
 
                     <label for="name">Имя</label>
-                    <input type="text" id="name" placeholder="Введите имя" name="name">
+                    <input type="text" id="name" placeholder="Введите имя" name="name" maxlength="30">
 
                     <label for="thirdName">Отчество</label>
-                    <input type="text" id="thirdName" name="thirdName" placeholder="Введите отчество">
+                    <input type="text" id="thirdName" name="thirdName" placeholder="Введите отчество" maxlength="30">
 
                     <label for="birthDate">Дата рождения</label>
                     <input class="required" type="date" id="birthDate" name="birthDate" oninput="this.className = ''" >
@@ -50,7 +50,7 @@
                 <h2>Шаг 3</h2>
                 <div class="form-inner">
                     <label for="characters">Личные качества</label>
-                    <textarea id="characters" name="characters" oninput="this.className = ''"></textarea>
+                    <textarea id="characters" name="characters" maxlength="100" oninput="this.className = ''"></textarea>
 
                     <p>Ваши навыки</p>
                     <div class="skills-wrap">

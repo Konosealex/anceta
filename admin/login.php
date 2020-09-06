@@ -1,6 +1,6 @@
 <?php
 require_once('connect.php');
-include('functions.php');
+require_once('functions.php');
 session_start();
 ?>
 <html lang="ru">
@@ -11,7 +11,8 @@ session_start();
 <body>
 <?
 $link = $conn;
-if (!empty($_SESSION['auth'])) {
+//pars($_SESSION['auth']);
+if (!empty(htmlspecialchars($_COOKIE["auth"]))) {
     header("Location: ../admin/index.php");
 }
 if (isset($_POST['submit'])) {
@@ -27,6 +28,7 @@ if (isset($_POST['submit'])) {
         // Ставим куки
         setcookie("id", $data['user_id'], time() + 60 * 60 * 24 * 30, "/");
         setcookie("hash", $hash, time() + 60 * 60 * 24 * 30, "/", null, null, true);
+        setcookie("auth", $hash, time() + 60 * 60 * 24 * 30, "/", null, null, true);
         // Переадресовываем браузер на страницу проверки
         header("Location: ../admin/index.php");
         exit();
@@ -50,6 +52,7 @@ if (isset($_POST['submit'])) {
         <input type="text" name="login" id="login">
         <label for="password">Пароль: </label><input type="password" name="password" id="password">
         <input type="submit" name="submit" value="Войти">
+        <button class="button__wrap-prev" type="button" id="prevBtn" onclick="document.location='/'">Выход</button>
     </div>
 </form>
 </body>

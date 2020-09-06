@@ -1,6 +1,6 @@
 <?php
 require_once('connect.php');
-include('functions.php');
+include_once('functions.php');
 ?>
 <html lang="ru">
 <head>

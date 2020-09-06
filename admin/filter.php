@@ -2,7 +2,7 @@
 require_once('connect.php');
 include('functions.php');
 session_start();
-if (empty($_SESSION['auth'])) {
+if (empty(htmlspecialchars($_COOKIE["auth"]))) {
     header("Location: ../admin/login.php");
 }
 ?>

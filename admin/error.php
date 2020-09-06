@@ -1,7 +1,10 @@
 <?php
+require_once('connect.php');
+include_once('functions.php');
+
 $maxavatarsize = 100000;
 $maxfiles = 5;
-$maxphotosize = 1000000;
+$maxphotosize = 1024 *1024;
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -25,8 +28,13 @@ $maxphotosize = 1000000;
             <?if ((count($_FILES['photos']['name'])) > $maxfiles):?>
                 <h1>Вы пытаетесь загрузить больше 5 файлов!</h1>
             <?endif;?>
-            <?if (($_FILES['photos']['size']) > $maxphotosize):?>
-                <h1>Размер файла превышает 1 мб!</h1>
+            <?foreach ($_FILES['photos']['tmp_name'] as $name):?>
+                <?if((filesize($name)) > $maxphotosize):?>
+                    <h1>Размер файла <?=$name?> превышает 1 мб!</h1>
+                <?endif;?>
+            <?endforeach;?>
+            <?if (!empty($allow)):?>
+            <h1>Запрещенное расширение файла!</h1>
             <?endif;?>
             <div class="buttons">
                 <div>
